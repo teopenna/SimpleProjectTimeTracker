@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Moq;
+using Microsoft.EntityFrameworkCore;
 using SimpleProjectTimeTracker.Web.Models;
-using SimpleProjectTimeTracker.Web.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Xunit;
 
@@ -12,51 +12,59 @@ namespace SimpleProjectTimeTracker.Web.Controllers
     public class ProjectsControllerTests
     {
         protected ProjectsController Sut { get; }
-        protected Mock<IProjectService> MockPProjectService { get; }
+        protected SimpleProjectTimeTrackerDbContext DbContext { get; }
+        protected DbContextOptions<SimpleProjectTimeTrackerDbContext> Options { get; }
 
         public ProjectsControllerTests()
         {
-            MockPProjectService = new Mock<IProjectService>();
-            Sut = new ProjectsController(MockPProjectService.Object);
+            var builder = new DbContextOptionsBuilder<SimpleProjectTimeTrackerDbContext>();
+            builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            Options = builder.Options;
+            DbContext = new SimpleProjectTimeTrackerDbContext(builder.Options);
+            Sut = new ProjectsController(DbContext);
         }
 
         [Fact]
-        public void ControllerWithNullServiceShouldThrowArgumentNullException()
+        public void ControllerWithNullDbContextShouldThrowArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new ProjectsController(null));
         }
 
-        public class ReadAllAsync : ProjectsControllerTests
+        public class GetProjects : ProjectsControllerTests
         {
             [Fact]
             public async void ShouldReturnOkWithProjectItems()
             {
-                var expectedProjects = new List<Project>()
+                IEnumerable<Project> expectedProjects;
+
+                using (var context = new SimpleProjectTimeTrackerDbContext(Options))
                 {
-                    new Project
+                    context.Projects.Add(new Project
                     {
+                        Id = 1,
                         CustomerName = "Microsoft",
                         Name = "Sample web project for BUILD event",
                         DueDate = new DateTime(2018, 7, 31),
                         HourlyRate = 45
-                    },
-                    new Project
+                    });
+                    context.Projects.Add(new Project
                     {
+                        Id = 2,
                         CustomerName = "Amazon",
                         Name = "Creation of a Picking List application",
                         DueDate = new DateTime(2018, 9, 30),
                         HourlyRate = 47
-                    }
-                };
+                    });
+                    await context.SaveChangesAsync();
 
-                MockPProjectService
-                    .Setup(p => p.ReadAllAsync(CancellationToken.None))
-                    .ReturnsAsync(expectedProjects);
+                    expectedProjects = await context.Projects.ToListAsync();
+                }
 
                 var result = await Sut.GetProjects(CancellationToken.None);
 
                 var okResult = Assert.IsType<OkObjectResult>(result);
-                Assert.Same(expectedProjects, okResult.Value);
+                var okResultValue = Assert.IsAssignableFrom<IEnumerable<Project>>(okResult.Value);
+                Assert.Equal(2, okResultValue.Count());
             }
         }
     }

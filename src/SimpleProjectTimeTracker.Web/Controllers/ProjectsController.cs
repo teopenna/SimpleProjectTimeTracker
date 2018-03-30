@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SimpleProjectTimeTracker.Web.Services;
 
 namespace SimpleProjectTimeTracker.Web.Controllers
@@ -10,17 +11,17 @@ namespace SimpleProjectTimeTracker.Web.Controllers
     [Route("api/projects")]
     public class ProjectsController : Controller
     {
-        private IProjectService _projectService;
+        private SimpleProjectTimeTrackerDbContext _dbContext;
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(SimpleProjectTimeTrackerDbContext dbContext)
         {
-            _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService), "A valid Project service must be supplied.");
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), "A valid DB Context must be supplied.");
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProjects(CancellationToken cancellationToken)
         {
-            var projects = await _projectService.ReadAllAsync(cancellationToken);
+            var projects = await _dbContext.Projects.ToListAsync();
             return Ok(projects);
         }
     }

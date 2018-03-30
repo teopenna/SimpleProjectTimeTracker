@@ -27,7 +27,6 @@ namespace SimpleProjectTimeTracker.Web
             services.AddDbContext<SimpleProjectTimeTrackerDbContext>(opt => opt.UseInMemoryDatabase("SimpleProjectTimeTracker"));
             services.AddMvc();
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
-            services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<ITimeRegistrationService, TimeRegistrationService>();
         }
 

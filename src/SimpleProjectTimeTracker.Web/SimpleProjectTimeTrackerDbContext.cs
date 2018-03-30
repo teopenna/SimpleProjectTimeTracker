@@ -5,7 +5,7 @@ namespace SimpleProjectTimeTracker.Web
 {
     public class SimpleProjectTimeTrackerDbContext : DbContext
     {
-        public DbSet<ProjectEntity> Projects { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<TimeRegistrationEntity> TimeRegistrations { get; set; }
 
         public SimpleProjectTimeTrackerDbContext(DbContextOptions<SimpleProjectTimeTrackerDbContext> options)

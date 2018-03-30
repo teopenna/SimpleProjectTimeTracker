@@ -8,7 +8,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
     {
         public static void SeedData(SimpleProjectTimeTrackerDbContext context)
         {
-            var project1 = context.Projects.Add(new ProjectEntity
+            var project1 = context.Projects.Add(new Project
             {
                 Id = 1,
                 CustomerName = "Microsoft",
@@ -17,7 +17,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
                 HourlyRate = 45
             }).Entity;
             
-            var project2 = context.Projects.Add(new ProjectEntity
+            var project2 = context.Projects.Add(new Project
             {
                 Id = 2,
                 CustomerName = "Amazon",
