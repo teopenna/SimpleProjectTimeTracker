@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SimpleProjectTimeTracker.Web.Services;
 
@@ -12,18 +10,18 @@ namespace SimpleProjectTimeTracker.Web.Controllers
     [Route("api/projects")]
     public class ProjectsController : Controller
     {
-        private ITimeRegistrationService _projectService;
+        private IProjectService _projectService;
 
-        public ProjectsController(ITimeRegistrationService projectService)
+        public ProjectsController(IProjectService projectService)
         {
             _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService), "A valid Project service must be supplied.");
         }
 
         [HttpGet]
-        [Route("api/timeregistrations")]
-        public IActionResult GetProjectsWithTimeRegistrations()
+        public async Task<IActionResult> GetProjects(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var projects = await _projectService.ReadAllAsync(cancellationToken);
+            return Ok(projects);
         }
     }
 }

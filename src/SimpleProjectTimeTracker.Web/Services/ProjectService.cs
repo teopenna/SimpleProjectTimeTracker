@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace SimpleProjectTimeTracker.Web.Services
     {
         private SimpleProjectTimeTrackerDbContext _dbContext;
 
-        public async Task<IEnumerable<Project>> ReadAllAsync()
+        public async Task<IEnumerable<Project>> ReadAllAsync(CancellationToken cancellationToken)
         {
             var projectEntities = await _dbContext
                 .Projects

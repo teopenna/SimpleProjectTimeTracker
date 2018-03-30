@@ -1,11 +1,12 @@
 ﻿using SimpleProjectTimeTracker.Web.Models;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SimpleProjectTimeTracker.Web.Services
 {
-    interface IProjectService
+    public interface IProjectService
     {
-        Task<IEnumerable<Project>> ReadAllAsync();
+        Task<IEnumerable<Project>> ReadAllAsync(CancellationToken cancellationToken);
     }
 }
