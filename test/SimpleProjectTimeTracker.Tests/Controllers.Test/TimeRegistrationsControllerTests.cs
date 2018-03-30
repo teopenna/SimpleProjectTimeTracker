@@ -67,18 +67,6 @@ namespace SimpleProjectTimeTracker.Web.Controllers
                 var okResult = Assert.IsType<OkObjectResult>(result);
                 Assert.Same(expectedTimeRegistrations, okResult.Value);
             }
-
-            //[Fact]
-            //public void ExceptionsShouldReturnInternalServerErrorStatusWithErrorDetails()
-            //{
-            //    MockTrackedTimeService
-            //        .Setup(t => t.ViewProjectTrackedTimes())
-            //        .Throws(new Exception("Test Exception"));
-
-            //    var result = Sut.ViewTrackedTimes();
-
-            //    var errorResult = Assert.IsType<ApiError>(result);
-            //}
         }
 
         public class Create : TimeRegistrationsControllerTests
