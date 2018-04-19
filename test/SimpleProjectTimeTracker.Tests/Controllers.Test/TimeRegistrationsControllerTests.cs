@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SimpleProjectTimeTracker.Web.Exceptions;
-using SimpleProjectTimeTracker.Web.Infrastructure;
 using SimpleProjectTimeTracker.Web.Models;
 using SimpleProjectTimeTracker.Web.Services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using Xunit;
 
