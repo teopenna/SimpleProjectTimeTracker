@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SimpleProjectTimeTracker.Web.Helpers;
 using SimpleProjectTimeTracker.Web.Models;
 
 namespace SimpleProjectTimeTracker.Web
@@ -11,6 +12,11 @@ namespace SimpleProjectTimeTracker.Web
         public SimpleProjectTimeTrackerDbContext(DbContextOptions<SimpleProjectTimeTrackerDbContext> options)
             : base(options)
         {
+        }
+
+        public void SeedDatabase()
+        {
+            SampleDataGenerator.SeedData(this);
         }
     }
 }
