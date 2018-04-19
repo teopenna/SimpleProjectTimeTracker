@@ -39,7 +39,7 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             return CreatedAtAction(nameof(Create), createdTimeRegistration);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] TimeRegistration timeRegistration, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
@@ -58,7 +58,7 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             try

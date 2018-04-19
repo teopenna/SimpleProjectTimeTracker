@@ -25,38 +25,56 @@ namespace SimpleProjectTimeTracker.Web.Services
         {
             var timeRegistrationEntity = _mapper.Map<TimeRegistrationEntity>(timeRegistration);
 
-            var a = await _dbContext.TimeRegistrations.AddAsync(timeRegistrationEntity, cancellationToken);
-            var i = await _dbContext.SaveChangesAsync(cancellationToken);
+            var timeRegistrationEntities = await _dbContext
+                .TimeRegistrations
+                .AsNoTracking()
+                .ToListAsync();
 
-            return Mapper.Map<TimeRegistration>(a.Entity);
+            if (timeRegistrationEntities.Count >= 30)
+            {
+                throw new Exception("This is a demo application, you can add no more than 30 registrations.");
+            }
+            
+            timeRegistrationEntity.Project = null;
+
+            var newTimeRegistration = await _dbContext.TimeRegistrations.AddAsync(timeRegistrationEntity, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return Mapper.Map<TimeRegistration>(newTimeRegistration.Entity);
         }
 
         public async Task<TimeRegistration> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var timeRegistrationEntity = await GetTimeRegistrationById(id, cancellationToken);
+
+            if (timeRegistrationEntity.Accounted)
+            {
+                throw new Exception("Time registration is already accounted, no changing or deleting is possible");
+            }
+
+            _dbContext.TimeRegistrations.Remove(timeRegistrationEntity);
+            await _dbContext.SaveChangesAsync();
+
+            return Mapper.Map<TimeRegistration>(timeRegistrationEntity);
         }
 
         public async Task<TimeRegistration> UpdateAsync(int id, TimeRegistration timeRegistration, CancellationToken cancellationToken)
         {
-            var timeRegistrationEntity = await _dbContext
-                .TimeRegistrations
-                .SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
-            
-            if (timeRegistrationEntity == null)
+            var timeRegistrationEntity = await GetTimeRegistrationById(id, cancellationToken);
+
+            if (timeRegistrationEntity.Accounted)
             {
-                throw new TimeRegistrationNotFoundException(id);
+                throw new Exception("Time registration is already accounted, no changing or deleting is possible");
             }
 
-            if (timeRegistration.ProjectId != timeRegistrationEntity.ProjectId)
+            if (timeRegistration.ProjectID != timeRegistrationEntity.ProjectID)
             {
                 var projectEntity = await _dbContext
                     .Projects
-                    .SingleOrDefaultAsync(p => p.Id == timeRegistration.ProjectId);
+                    .SingleOrDefaultAsync(p => p.Id == timeRegistration.ProjectID);
 
-                // TODO: Throw exception if project was not found
-
-                timeRegistrationEntity.Project = projectEntity;
-                timeRegistrationEntity.ProjectId = projectEntity.Id;
+                timeRegistrationEntity.Project = projectEntity ?? throw new ProjectNotFoundException(timeRegistrationEntity.ProjectID);
+                timeRegistrationEntity.ProjectID = projectEntity.Id;
             }
 
             timeRegistrationEntity.Date = timeRegistration.Date;
@@ -79,7 +97,23 @@ namespace SimpleProjectTimeTracker.Web.Services
 
         public async Task<TimeRegistration> ReadSingleAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var timeRegistrationEntity = await GetTimeRegistrationById(id, cancellationToken);
+
+            return Mapper.Map<TimeRegistration>(timeRegistrationEntity);
+        }
+
+        private async Task<TimeRegistrationEntity> GetTimeRegistrationById(int id, CancellationToken cancellationToken)
+        {
+            var timeRegistrationEntity = await _dbContext
+                .TimeRegistrations
+                .SingleOrDefaultAsync(t => t.ID == id, cancellationToken);
+
+            if (timeRegistrationEntity == null)
+            {
+                throw new TimeRegistrationNotFoundException(id);
+            }
+
+            return timeRegistrationEntity;
         }
     }
 }

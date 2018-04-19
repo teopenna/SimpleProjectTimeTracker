@@ -21,8 +21,10 @@ namespace SimpleProjectTimeTracker.Web.Infrastructure
         {
             _environment = environment;
 
-            _serializer = new JsonSerializer();
-            _serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            _serializer = new JsonSerializer
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         public async Task Invoke(HttpContext context)
