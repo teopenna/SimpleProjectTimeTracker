@@ -28,7 +28,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
 
             context.TimeRegistrations.Add(new TimeRegistrationEntity
             {
-                ProjectID = 1,
+                ProjectId = 1,
                 Project = project1,
                 Date = new DateTime(2018, 3, 24),
                 HoursWorked = 6.5m,
@@ -37,7 +37,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
 
             context.TimeRegistrations.Add(new TimeRegistrationEntity
             {
-                ProjectID = 1,
+                ProjectId = 1,
                 Project = project1,
                 Date = new DateTime(2018, 3, 23),
                 HoursWorked = 5.5m,
@@ -46,7 +46,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
 
             context.TimeRegistrations.Add(new TimeRegistrationEntity
             {
-                ProjectID = 2,
+                ProjectId = 2,
                 Project = project2,
                 Date = new DateTime(2018, 3, 23),
                 HoursWorked = 2.5m,
