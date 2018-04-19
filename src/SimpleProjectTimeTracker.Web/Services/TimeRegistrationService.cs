@@ -67,14 +67,14 @@ namespace SimpleProjectTimeTracker.Web.Services
                 throw new Exception("Time registration is already accounted, no changing or deleting is possible");
             }
 
-            if (timeRegistration.ProjectID != timeRegistrationEntity.ProjectID)
+            if (timeRegistration.ProjectID != timeRegistrationEntity.ProjectId)
             {
                 var projectEntity = await _dbContext
                     .Projects
                     .SingleOrDefaultAsync(p => p.Id == timeRegistration.ProjectID);
 
-                timeRegistrationEntity.Project = projectEntity ?? throw new ProjectNotFoundException(timeRegistrationEntity.ProjectID);
-                timeRegistrationEntity.ProjectID = projectEntity.Id;
+                timeRegistrationEntity.Project = projectEntity ?? throw new ProjectNotFoundException(timeRegistrationEntity.ProjectId);
+                timeRegistrationEntity.ProjectId = projectEntity.Id;
             }
 
             timeRegistrationEntity.Date = timeRegistration.Date;
@@ -99,14 +99,14 @@ namespace SimpleProjectTimeTracker.Web.Services
         {
             var timeRegistrationEntity = await GetTimeRegistrationById(id, cancellationToken);
 
-            return Mapper.Map<TimeRegistration>(timeRegistrationEntity);
+            return _mapper.Map<TimeRegistration>(timeRegistrationEntity);
         }
 
         private async Task<TimeRegistrationEntity> GetTimeRegistrationById(int id, CancellationToken cancellationToken)
         {
             var timeRegistrationEntity = await _dbContext
                 .TimeRegistrations
-                .SingleOrDefaultAsync(t => t.ID == id, cancellationToken);
+                .SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
 
             if (timeRegistrationEntity == null)
             {

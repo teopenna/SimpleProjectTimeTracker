@@ -6,8 +6,8 @@ namespace SimpleProjectTimeTracker.Web.Models
     public class TimeRegistrationEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
-        public int ProjectID { get; set; }
+        public int Id { get; set; }
+        public int ProjectId { get; set; }
         public Project Project { get; set; }
         public DateTime Date { get; set; }
         public decimal HoursWorked { get; set; }
