@@ -26,6 +26,20 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             return Ok(timeRegistrations);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTimeRegistration(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var timeRegistration = await _timeRegistrationService.ReadSingleAsync(id, cancellationToken);
+                return Ok(timeRegistration);
+            }
+            catch (TimeRegistrationNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TimeRegistration timeRegistration, CancellationToken cancellationToken)
         {
