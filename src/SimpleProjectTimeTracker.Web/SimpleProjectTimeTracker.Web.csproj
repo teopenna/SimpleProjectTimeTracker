@@ -11,6 +11,7 @@
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
@@ -25,26 +26,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Remove="ClientApp\components\Header.tsx" />
-    <None Remove="ClientApp\components\Routes.tsx" />
-    <None Remove="ClientApp\components\TimeRegistrationForm.tsx" />
-    <None Remove="ClientApp\components\TImeRegistrations.tsx" />
-    <None Remove="ClientApp\services\RestUtilities.ts" />
-    <None Remove="ClientApp\services\TimeRegistrations.ts" />
-  </ItemGroup>
-  
-  <ItemGroup>
+    <Folder Include="ClientApp\services\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\dist\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\components\Header.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\Routes.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\TimeRegistrationForm.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\TImeRegistrations.tsx" />
-    <TypeScriptCompile Include="ClientApp\services\RestUtilities.ts" />
-    <TypeScriptCompile Include="ClientApp\services\TimeRegistrations.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
