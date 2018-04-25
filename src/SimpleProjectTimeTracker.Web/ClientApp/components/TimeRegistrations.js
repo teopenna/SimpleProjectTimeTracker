@@ -13,6 +13,8 @@ export class TimeRegistrations extends Component {
         };
 
         this.SimpleProjectTimeTrackerService = new SimpleProjectTimeTrackerService('api');
+
+        this.delete = this.delete.bind(this);
     }
 
     componentDidMount() {
@@ -24,7 +26,17 @@ export class TimeRegistrations extends Component {
     }
 
     delete(timeRegistration) {
-        console.log('Delete TR id ' + timeRegistration.id);
+        if (confirm('Delete Time Registration with id ' + timeRegistration.id + '. Are you sure?')) {
+            this.SimpleProjectTimeTrackerService.deleteTimeRegistration(timeRegistration)
+                .then(res => {
+                    if (!res.is_error) {
+                        this.props.history.push('/timeregistrations');
+                    }
+                    else {
+                        alert('Error!');
+                    }
+                });
+        }
     }
 
     render() {

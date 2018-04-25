@@ -58,4 +58,24 @@ export default class SimpleProjectTimeTrackerService {
                 return response;
             });
     }
+
+    deleteTimeRegistration(timeRegistration) {
+        this.client.delete('timeregistrations/' + timeRegistration.id)
+            .then(response => {
+                isBadRequest = (response.status === 400);
+
+                let responseContentType = response.headers['content-type'];
+                if (responseContentType && responseContentType.indexOf('application/json') !== -1) {
+                    isJsonResponse = true;
+                }
+                return response.data;
+            }).then(responseContent => {
+                let response = {
+                    is_error: isBadRequest,
+                    error_content: isBadRequest ? responseContent : null,
+                    content: isBadRequest ? null : responseContent
+                };
+                return response;
+            });
+    }
 }
