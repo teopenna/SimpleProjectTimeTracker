@@ -67,11 +67,11 @@ namespace SimpleProjectTimeTracker.Web.Services
                 throw new Exception("Time registration is already accounted, no changing or deleting is possible");
             }
 
-            if (timeRegistration.ProjectID != timeRegistrationEntity.ProjectId)
+            if (timeRegistration.ProjectId != timeRegistrationEntity.ProjectId)
             {
                 var projectEntity = await _dbContext
                     .Projects
-                    .SingleOrDefaultAsync(p => p.Id == timeRegistration.ProjectID);
+                    .SingleOrDefaultAsync(p => p.Id == timeRegistration.ProjectId);
 
                 timeRegistrationEntity.Project = projectEntity ?? throw new ProjectNotFoundException(timeRegistrationEntity.ProjectId);
                 timeRegistrationEntity.ProjectId = projectEntity.Id;
