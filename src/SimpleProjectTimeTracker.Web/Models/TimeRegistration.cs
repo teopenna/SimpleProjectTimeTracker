@@ -6,9 +6,9 @@ namespace SimpleProjectTimeTracker.Web.Models
 {
     public class TimeRegistration
     {
-        public int ID { get; set; } 
+        public int Id { get; set; } 
         [Required]
-        public int ProjectID { get; set; }
+        public int ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string CustomerName { get; set; }
         [Required]
