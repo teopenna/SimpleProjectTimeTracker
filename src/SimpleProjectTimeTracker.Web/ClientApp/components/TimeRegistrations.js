@@ -1,20 +1,25 @@
-﻿import * as React from 'react';
+﻿import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import SimpleProjectTimeTrackerService from '../services/SimpleProjectTimeTrackerService';
+import Octicon from 'react-octicon';
+import moment from 'moment';
 
-export class TimeRegistrations extends React.Component {
+export class TimeRegistrations extends Component {
     constructor(props) {
         super(props);
         this.state = {
             timeRegistrations: []
         };
+
+        this.SimpleProjectTimeTrackerService = new SimpleProjectTimeTrackerService('api');
     }
 
     componentDidMount() {
-        axios.get('api/timeregistrations')
-            .then(res => {
-                this.setState({ timeRegistrations: res.data });
+        this.SimpleProjectTimeTrackerService.getTimeRegistrations()
+            .then(response => {
+                const timeRegistrations = response.data;
+                this.setState({ timeRegistrations: timeRegistrations });
             });
     }
 
@@ -30,25 +35,31 @@ export class TimeRegistrations extends React.Component {
                         <h3 className="panel-title">Time Registrations</h3>
                     </div>
                     <div className="panel-body">
-                        <Link className="btn btn-success" to="/create"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add Time Registration</Link>
+                        <Link className="btn btn-primary" to="/timeregistrations/create">Add Time Registration</Link>
                         <table className="table table-stripe">
                             <thead>
                                 <tr>
                                     <th>Project</th>
+                                    <th>Customer</th>
                                     <th>Date</th>
                                     <th>Hours Worked</th>
+                                    <th>Accounted</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.timeRegistrations.map(timeRegistration => 
-                                    <tr>
+                                {this.state.timeRegistrations.map(timeRegistration =>
+                                    <tr key={timeRegistration.id}>
                                         <td>{timeRegistration.projectName}</td>
-                                        <td>{timeRegistration.date}</td>
+                                        <td>{timeRegistration.customerName}</td>
+                                        <td>{moment(timeRegistration.date).format('L')}</td>
                                         <td>{timeRegistration.hoursWorked}</td>
-                                        <td>
-                                            <Link to={'/timeregistrations/' + timeRegistration.id.toString()}>edit</Link>
-                                            <button type="button" className="btn btn-link" onClick={(e) => this.delete(timeRegistration)}>delete</button>
+                                        <td>{timeRegistration.accounted ? <Octicon mega name="check" /> : '' }</td>
+                                        <td>{!timeRegistration.accounted ?
+                                            (<span>
+                                                <Link to={'/timeregistrations/edit/' + timeRegistration.id.toString()}>edit</Link>
+                                                <button type="button" className="btn btn-link" onClick={(e) => this.delete(timeRegistration)}>delete</button></span>)
+                                            : '' }
                                         </td>
                                     </tr>
                                 )}

@@ -1,18 +1,20 @@
-﻿import * as React from 'react';
+﻿import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import SimpleProjectTimeTrackerService from '../services/SimpleProjectTimeTrackerService';
 
-export class Projects extends React.Component {
+export class Projects extends Component {
     constructor(props) {
         super(props);
         this.state = {
             projects: []
         };
+
+        this.SimpleProjectTimeTrackerService = new SimpleProjectTimeTrackerService('api');
     }
 
     componentDidMount() {
-        axios.get('api/projects')
+        this.SimpleProjectTimeTrackerService.getProjects()
             .then(res => {
                 this.setState({ projects: res.data });
             });

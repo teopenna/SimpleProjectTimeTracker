@@ -34,7 +34,14 @@ module.exports = (env) => {
                         ? ["style-loader", "css-loader"]
                         : [MiniCssExtractPlugin.loader, "css-loader?minimize"]
                 },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: "url-loader?limit=25000" }
+                {
+                    test: /\.(png|jpg|jpeg|gif)$/,
+                    use: "url-loader?limit=25000"
+                },
+                {
+                    test: /\.(eot|otf|svg|ttf|woff|woff2)$/,
+                    use: "file-loader"
+                }
             ]
         },
         plugins: [
