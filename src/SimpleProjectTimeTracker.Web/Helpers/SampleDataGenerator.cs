@@ -41,7 +41,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
                 Project = project1,
                 Date = new DateTime(2018, 3, 23),
                 HoursWorked = 5.5m,
-                Accounted = false
+                Accounted = true
             });
 
             context.TimeRegistrations.Add(new TimeRegistrationEntity
