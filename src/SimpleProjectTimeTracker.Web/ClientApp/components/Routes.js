@@ -14,7 +14,7 @@ export default class Routes extends Component {
             <DefaultLayout exact path="/timeregistrations/create" component={TimeRegistrationForm} />
             <DefaultLayout exact path="/timeregistrations/edit/:id" component={TimeRegistrationForm} />
             <DefaultLayout exact path="/projects" component={Projects} />
-        </Switch>
+        </Switch>;
     }
 }
 
