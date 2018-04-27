@@ -1,9 +1,9 @@
 ﻿const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env) => {
-    const extractCSS = new ExtractTextPlugin('vendor.css');
+    const extractCSS = new MiniCssExtractPlugin({ filename: 'vendor.css' });
     const isDevBuild = !(env && env.prod);
     return [{
         stats: { modules: false },
@@ -13,7 +13,7 @@ module.exports = (env) => {
         module: {
             rules: [
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' },
-                { test: /\.css(\?|$)/, use: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']) }
+                { test: /\.css(\?|$)/, use: isDevBuild ? ["style-loader", "css-loader"] : [MiniCssExtractPlugin.loader, "css-loader?minimize"] }
             ]
         },
         entry: {
@@ -34,9 +34,7 @@ module.exports = (env) => {
             }),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'
-            })
-        ].concat(isDevBuild ? [] : [
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+            }),
+        ]
     }];
 };
