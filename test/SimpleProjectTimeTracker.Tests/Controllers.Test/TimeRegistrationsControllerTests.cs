@@ -36,8 +36,8 @@ namespace SimpleProjectTimeTracker.Web.Controllers
                 {
                     new TimeRegistration
                     {
-                        ID = 1,
-                        ProjectID = 1,
+                        Id = 1,
+                        ProjectId = 1,
                         ProjectName = "Sample web project for BUILD event",
                         CustomerName = "Microsoft",
                         Date = new DateTime(2018, 3, 24),
@@ -46,8 +46,8 @@ namespace SimpleProjectTimeTracker.Web.Controllers
                     },
                     new TimeRegistration
                     {
-                        ID = 2,
-                        ProjectID = 2,
+                        Id = 2,
+                        ProjectId = 2,
                         ProjectName = "Creation of a Picking List application",
                         CustomerName = "Amazon",
                         Date = new DateTime(2018, 3, 23),
@@ -75,7 +75,7 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             {
                 _expectedTimeRegistration = new TimeRegistration
                 {
-                    ProjectID = 1,
+                    ProjectId = 1,
                     ProjectName = "Example project creation for BUILD session",
                     CustomerName = "Microsoft",
                     Date = new DateTime(2018, 3, 18),
@@ -116,7 +116,7 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             {
                 _expectedTimeRegistration = new TimeRegistration
                 {
-                    ProjectID = 1,
+                    ProjectId = 1,
                     ProjectName = "Example project creation for BUILD session",
                     CustomerName = "Microsoft",
                     Date = new DateTime(2018, 3, 18),
@@ -128,10 +128,10 @@ namespace SimpleProjectTimeTracker.Web.Controllers
             public async void ShouldReturnOkActionResultWithUpdatedTimeRegistration()
             {
                 MockTimeRegistrationService
-                    .Setup(t => t.UpdateAsync(_expectedTimeRegistration.ID, _expectedTimeRegistration, CancellationToken.None))
+                    .Setup(t => t.UpdateAsync(_expectedTimeRegistration.Id, _expectedTimeRegistration, CancellationToken.None))
                     .ReturnsAsync(_expectedTimeRegistration);
 
-                var result = await Sut.Update(_expectedTimeRegistration.ID, _expectedTimeRegistration, CancellationToken.None);
+                var result = await Sut.Update(_expectedTimeRegistration.Id, _expectedTimeRegistration, CancellationToken.None);
 
                 var okResult = Assert.IsType<OkObjectResult>(result);
                 Assert.Same(_expectedTimeRegistration, okResult.Value);
