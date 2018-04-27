@@ -75,8 +75,7 @@ namespace SimpleProjectTimeTracker.Web.Services
                     Date = DateTime.Now.Date,
                     Details = invoiceDetails.ToList(),
                     VatPercentage = customer.VatPercentage,
-                    NetAmount = totalAmount,
-                    VatAmount = Math.Round((totalAmount * customer.VatPercentage / 100), 2)
+                    NetAmount = totalAmount
                 };
 
                 _dbContext.Invoices.Add(invoice);

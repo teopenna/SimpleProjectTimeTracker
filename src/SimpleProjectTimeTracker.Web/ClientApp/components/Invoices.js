@@ -33,9 +33,11 @@ export class Invoices extends Component {
                         <table className="table table-stripe">
                             <thead>
                                 <tr>
+                                    <th>Number</th>
                                     <th>Date</th>
                                     <th>Customer</th>
                                     <th>Net Amount</th>
+                                    <th>VAT Perc.</th>
                                     <th>Gross Amount</th>
                                     <th></th>
                                 </tr>
@@ -43,9 +45,11 @@ export class Invoices extends Component {
                             <tbody>
                                 {this.state.invoices.map(invoice =>
                                     <tr key={invoice.id}>
+                                        <td>{invoice.number}</td>
                                         <td>{moment(invoice.date).format('L')}</td>
                                         <td>{invoice.customerName}</td>
                                         <td>{invoice.netAmount}</td>
+                                        <td>{invoice.vatPercentage}</td>
                                         <td>{invoice.grossAmount}</td>
                                     </tr>
                                 )}

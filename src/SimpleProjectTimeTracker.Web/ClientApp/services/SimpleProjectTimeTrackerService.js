@@ -1,5 +1,4 @@
 ﻿import axios from 'axios';
-import { debug } from 'util';
 
 export default class SimpleProjectTimeTrackerService {
     constructor(baseUrl) {
