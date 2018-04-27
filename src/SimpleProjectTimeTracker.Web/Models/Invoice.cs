@@ -13,6 +13,6 @@ namespace SimpleProjectTimeTracker.Web.Models
         public decimal GrossAmount { get; set; }
         public decimal VatAmount { get; set; }
         public decimal VatPercentage { get; set; }
-        public ICollection<InvoiceDetailEntity> Details { get; set; }
+        public List<InvoiceDetail> Details { get; set; }
     }
 }

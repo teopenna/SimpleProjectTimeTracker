@@ -44,8 +44,8 @@
     "webpack-hot-middleware": "^2.21.2"
   },
   "scripts": {
-    "start": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
-    "build": "cross-env ASPNETCORE_ENVIRONMENT=Production dotnet build",
+    "start": "cross-env ASPNETCORE_ENVIRONMENT=Development NODE_ENV=development dotnet run",
+    "build": "cross-env ASPNETCORE_ENVIRONMENT=Production NODE_ENV=production dotnet build",
     "dev": "webpack --mode development"
   },
   "keywords": [],

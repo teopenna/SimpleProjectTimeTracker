@@ -20,12 +20,12 @@ namespace SimpleProjectTimeTracker.Web.Services
             _mapper = mapper;
         }
 
-        public async Task<Byte[]> CreateAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Invoice>> CreateAsync(CancellationToken cancellationToken)
         {
             var timeRegistrations = await _dbContext
                 .TimeRegistrations
+                .Include("Project")
                 .Where(t => !t.Accounted)
-                .AsNoTracking()
                 .ToListAsync();
 
             var timeRegistrationCustomers = from tr in timeRegistrations
@@ -40,45 +40,60 @@ namespace SimpleProjectTimeTracker.Web.Services
                                                 CustomerRegistrations.Key.VatPercentage
                                             };
 
+            var invoices = new List<Invoice>();
+
             foreach (var customer in timeRegistrationCustomers)
             {
-                var projectTimeRegistrations = from tr in timeRegistrations
-                                               where tr.Project.CustomerName == customer.CustomerName
-                                               orderby tr.ProjectId
-                                               select new InvoiceDetailEntity
-                                               {
-                                                   ProjectName = tr.Project.Name,
-                                                   HourlyRate = tr.Project.HourlyRate,
-                                                   Date = tr.Date,
-                                                   HoursWorked = tr.HoursWorked,
-                                                   Amount = Math.Round(tr.HoursWorked * tr.Project.HourlyRate)
-                                               };
+                var invoiceDetails = from tr in timeRegistrations
+                                     where tr.Project.CustomerName == customer.CustomerName
+                                     orderby tr.ProjectId
+                                     select new InvoiceDetailEntity
+                                     {
+                                         ProjectName = tr.Project.Name,
+                                         HourlyRate = tr.Project.HourlyRate,
+                                         Date = tr.Date,
+                                         HoursWorked = tr.HoursWorked,
+                                         Amount = Math.Round(tr.HoursWorked * tr.Project.HourlyRate),
+                                         TimeRegistrationId = tr.Id
+                                     };
 
-                var totalAmount = projectTimeRegistrations
+                var timeRegistrationsToUpdate = from tr in timeRegistrations
+                                                where tr.Project.CustomerName == customer.CustomerName
+                                                select tr;
+
+                foreach (var timeRegistrationToUpdate in timeRegistrationsToUpdate)
+                {
+                    timeRegistrationToUpdate.Accounted = true;
+                }
+
+                var totalAmount = invoiceDetails
                     .Sum(p => p.Amount);
 
                 var invoice = new InvoiceEntity
                 {
                     CustomerName = customer.CustomerName,
                     Date = DateTime.Now.Date,
-                    Details = projectTimeRegistrations.ToList(),
+                    Details = invoiceDetails.ToList(),
                     VatPercentage = customer.VatPercentage,
                     NetAmount = totalAmount,
                     VatAmount = Math.Round((totalAmount * customer.VatPercentage / 100), 2)
                 };
 
                 _dbContext.Invoices.Add(invoice);
+
                 await _dbContext.SaveChangesAsync(CancellationToken.None);
 
-                
+                var createdInvoice = _mapper.Map<Invoice>(invoice);
+                invoices.Add(createdInvoice);
             }
 
-            return new Byte[] { };
+            return invoices;
         }
 
         public async Task<IEnumerable<Invoice>> ReadAllAsync(CancellationToken cancellationToken)
         {
             var invoiceEntities = await _dbContext.Invoices
+                .Include("Details")
                 .OrderByDescending(i => i.Date)
                 .ToListAsync();
 

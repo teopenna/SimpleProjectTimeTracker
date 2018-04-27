@@ -21,11 +21,11 @@ namespace SimpleProjectTimeTracker.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] IEnumerable<TimeRegistration> timeRegistrations, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(CancellationToken cancellationToken)
         {
-            var createdInvoice = await _invoiceService.CreateAsync(cancellationToken);
+            var createdInvoices = await _invoiceService.CreateAsync(cancellationToken);
 
-            return CreatedAtAction(nameof(Create), createdInvoice);
+            return CreatedAtAction(nameof(Create), createdInvoices);
         }
 
         [HttpGet("{id}")]

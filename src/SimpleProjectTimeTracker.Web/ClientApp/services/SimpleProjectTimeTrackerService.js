@@ -51,8 +51,8 @@ export default class SimpleProjectTimeTrackerService {
                 return response.data;
             }).then(responseContent => {
                 let response = {
-                    is_error: isBadRequest,
-                    error_content: isBadRequest ? responseContent : null,
+                    isError: isBadRequest,
+                    errorContent: isBadRequest ? responseContent : null,
                     content: isBadRequest ? null : responseContent
                 };
                 return response;
@@ -60,7 +60,10 @@ export default class SimpleProjectTimeTrackerService {
     }
 
     deleteTimeRegistration(timeRegistration) {
-        this.client.delete('timeregistrations/' + timeRegistration.id)
+        let isBadRequest = false;
+        let isJsonResponse = false;
+
+        return this.client.delete('timeregistrations/' + timeRegistration.id)
             .then(response => {
                 isBadRequest = (response.status === 400);
 
@@ -71,8 +74,8 @@ export default class SimpleProjectTimeTrackerService {
                 return response.data;
             }).then(responseContent => {
                 let response = {
-                    is_error: isBadRequest,
-                    error_content: isBadRequest ? responseContent : null,
+                    isError: isBadRequest,
+                    errorContent: isBadRequest ? responseContent : null,
                     content: isBadRequest ? null : responseContent
                 };
                 return response;
@@ -81,5 +84,23 @@ export default class SimpleProjectTimeTrackerService {
 
     getInvoices() {
         return this.client.get('invoices');
+    }
+
+    createInvoices() {
+        let isOk = true;
+
+        return this.client.post('invoices')
+            .then(response => {
+                isOk = (response.status === 201);
+
+                return response.data;
+            }).then(responseContent => {
+                let response = {
+                    isError: !isOk,
+                    errorContent: !isOk ? responseContent : null,
+                    content: isOk ? responseContent : null
+                };
+                return response;
+            });
     }
 }

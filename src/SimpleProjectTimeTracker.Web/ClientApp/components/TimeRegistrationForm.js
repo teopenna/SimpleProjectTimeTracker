@@ -52,7 +52,7 @@ export class TimeRegistrationForm extends Component {
         event.preventDefault();
         this.SimpleProjectTimeTrackerService.saveTimeRegistration(this.state.timeRegistration)
             .then(res => {
-                if (!res.is_error) {
+                if (!res.isError) {
                     this.props.history.push('/timeregistrations');
                 }
                 else {
@@ -80,12 +80,7 @@ export class TimeRegistrationForm extends Component {
             contact: Object.assign(this.state.timeRegistration, timeRegistrationUpdates)
         });
     }
-
-    saveTimeRegistration(timeRegistration) {
-        this.setState({ errors: {} });
-
-    }
-
+    
     render() {
         return (
             <fieldset className="form-group">

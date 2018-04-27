@@ -11,6 +11,6 @@ namespace SimpleProjectTimeTracker.Web.Models
         public decimal VatPercentage { get; set; }
         public DateTime DueDate { get; set; }
         public decimal HourlyRate { get; set; }
-        public List<TimeRegistrationEntity> TimeRegistrations { get; set; }
+        public ICollection<TimeRegistrationEntity> TimeRegistrations { get; set; }
     }
 }

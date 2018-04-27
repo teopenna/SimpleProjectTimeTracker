@@ -2,7 +2,6 @@
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import SimpleProjectTimeTrackerService from '../services/SimpleProjectTimeTrackerService';
-import Octicon from 'react-octicon';
 import moment from 'moment';
 
 export class Invoices extends Component {
@@ -44,10 +43,10 @@ export class Invoices extends Component {
                             <tbody>
                                 {this.state.invoices.map(invoice =>
                                     <tr key={invoice.id}>
-                                        <td>moment(invoice.date).format('L')}</td>
+                                        <td>{moment(invoice.date).format('L')}</td>
                                         <td>{invoice.customerName}</td>
-                                        <td>{timeRegistration.netAmount}</td>
-                                        <td>{timeRegistration.grossAmount}</td>
+                                        <td>{invoice.netAmount}</td>
+                                        <td>{invoice.grossAmount}</td>
                                     </tr>
                                 )}
                             </tbody>

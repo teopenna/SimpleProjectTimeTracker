@@ -29,6 +29,7 @@ namespace SimpleProjectTimeTracker.Web
             services.AddMvc();
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
             services.AddScoped<ITimeRegistrationService, TimeRegistrationService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

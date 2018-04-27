@@ -15,6 +15,7 @@ export class TimeRegistrations extends Component {
         this.SimpleProjectTimeTrackerService = new SimpleProjectTimeTrackerService('api');
 
         this.delete = this.delete.bind(this);
+        this.createInvoices = this.createInvoices.bind(this);
     }
 
     componentDidMount() {
@@ -29,8 +30,22 @@ export class TimeRegistrations extends Component {
         if (confirm('Delete Time Registration with id ' + timeRegistration.id + '. Are you sure?')) {
             this.SimpleProjectTimeTrackerService.deleteTimeRegistration(timeRegistration)
                 .then(res => {
-                    if (!res.is_error) {
+                    if (!res.isError) {
                         this.props.history.push('/timeregistrations');
+                    }
+                    else {
+                        alert('Error!');
+                    }
+                });
+        }
+    }
+
+    createInvoices() {
+        if (confirm('Do you really want to create invoices for not accounted time registrations?')) {
+            let res = this.SimpleProjectTimeTrackerService.createInvoices()
+                .then(res => {
+                    if (!res.isError) {
+                        this.props.history.push('/invoices');
                     }
                     else {
                         alert('Error!');
@@ -77,7 +92,7 @@ export class TimeRegistrations extends Component {
                                 )}
                             </tbody>
                         </table>
-                        <Link className="btn btn-primary" to="/invoices/create">Create invoice for not accounted items</Link>
+                        <button type="button" className="btn btn-primary" onClick={(e) => this.createInvoices()}>Create invoice for not accounted items</button>
                     </div>
                 </div>
             </div>
