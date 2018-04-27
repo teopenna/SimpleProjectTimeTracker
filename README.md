@@ -12,6 +12,6 @@ npm install
 ```
 Run application
 ```
-npm run
+npm start
 ```
 Open a browser to http://localhost:8080
