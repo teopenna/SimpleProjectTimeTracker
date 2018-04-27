@@ -78,4 +78,8 @@ export default class SimpleProjectTimeTrackerService {
                 return response;
             });
     }
+
+    getInvoices() {
+        return this.client.get('invoices');
+    }
 }

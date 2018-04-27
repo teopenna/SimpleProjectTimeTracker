@@ -77,6 +77,7 @@ export class TimeRegistrations extends Component {
                                 )}
                             </tbody>
                         </table>
+                        <Link className="btn btn-primary" to="/invoices/create">Create invoice for not accounted items</Link>
                     </div>
                 </div>
             </div>

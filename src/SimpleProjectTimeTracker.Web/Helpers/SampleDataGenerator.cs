@@ -12,6 +12,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
             {
                 Id = 1,
                 CustomerName = "Microsoft",
+                VatPercentage = 22,
                 Name = "Sample web project for BUILD event",
                 DueDate = new DateTime(2018, 7, 31),
                 HourlyRate = 45
@@ -21,6 +22,7 @@ namespace SimpleProjectTimeTracker.Web.Helpers
             {
                 Id = 2,
                 CustomerName = "Amazon",
+                VatPercentage = 19.5m,
                 Name = "Creation of a Picking List application",
                 DueDate = new DateTime(2018, 9, 30),
                 HourlyRate = 47

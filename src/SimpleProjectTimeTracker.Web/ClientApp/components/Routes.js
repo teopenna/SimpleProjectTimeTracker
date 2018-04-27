@@ -5,6 +5,7 @@ import { Header } from './Header';
 import { TimeRegistrations } from './TimeRegistrations';
 import { TimeRegistrationForm } from './TimeRegistrationForm';
 import { Projects } from './Projects';
+import { Invoices } from './Invoices';
 
 export default class Routes extends Component {
     render() {
@@ -14,6 +15,7 @@ export default class Routes extends Component {
             <DefaultLayout exact path="/timeregistrations/create" component={TimeRegistrationForm} />
             <DefaultLayout exact path="/timeregistrations/edit/:id" component={TimeRegistrationForm} />
             <DefaultLayout exact path="/projects" component={Projects} />
+            <DefaultLayout exact path="/invoices" component={Invoices} />
         </Switch>;
     }
 }

@@ -22,9 +22,14 @@ export class Header extends Component {
                         <li className="nav-item">
                             <a className="nav-link" href="/projects">Projects</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/invoices">Invoices</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         );
     }
 }
+
+Header.displayName = 'Header';
