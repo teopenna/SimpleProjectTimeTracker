@@ -1,0 +1,16 @@
+﻿body {
+    padding-top: 0;
+    font-family: "century gothic", verdana;
+}
+
+.btn-link {
+    cursor: pointer;
+}
+
+.btn {
+    margin: 10px 3px 10px 3px;
+}
+
+.table td {
+    vertical-align: middle;
+}
