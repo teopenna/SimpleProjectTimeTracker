@@ -2,7 +2,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,10 +25,24 @@ namespace SimpleProjectTimeTracker.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SimpleProjectTimeTrackerDbContext>(opt => opt.UseInMemoryDatabase("SimpleProjectTimeTracker"));
+            services.AddCors(options => 
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
             services.AddMvc();
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
             services.AddScoped<ITimeRegistrationService, TimeRegistrationService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,12 +51,7 @@ namespace SimpleProjectTimeTracker.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
-                    HotModuleReplacement = true,
-                    ReactHotModuleReplacement = true
-                });
+                app.UseCors("CorsPolicy");
             }
 
             var jsonExceptionMiddleware = new JsonExceptionMiddleware(app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
@@ -53,16 +61,23 @@ namespace SimpleProjectTimeTracker.Web
             SampleDataGenerator.SeedData(context);
 
             app.UseStaticFiles();
-
+            app.UseSpaStaticFiles();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                }
             });
         }
     }
