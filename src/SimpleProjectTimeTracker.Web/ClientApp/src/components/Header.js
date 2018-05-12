@@ -1,13 +1,12 @@
-﻿import React, { Component } from "react";
+﻿import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
-export default class Header extends Component {
+class Header extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container">
                     <NavLink className="navbar-brand" to="/">Simple Project Time Tracker</NavLink>
-                
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
@@ -27,4 +26,4 @@ export default class Header extends Component {
     }
 }
 
-Header.displayName = 'Header';
+export default Header;

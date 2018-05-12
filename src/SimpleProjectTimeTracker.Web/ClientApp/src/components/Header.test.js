@@ -1,24 +1,26 @@
 ﻿import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from 'react-testing-library';
+import { MemoryRouter } from 'react-router'
 import Header from './Header';
-
-const setup = () => {
-    const wrapper = shallow(<Header />);
-
-    return {
-        wrapper,
-    }
-};
 
 describe('Header Component', () => {
     it('should render without crashing', () => {
-        const { wrapper } = setup();
-        expect(wrapper).toMatchSnapshot();
+        const { queryByText } = render(
+            <MemoryRouter>
+                <Header />
+            </MemoryRouter>
+        );
+        const navbarBrand = queryByText('Simple Project Time Tracker');
+        expect(navbarBrand.innerHTML).toBe('Simple Project Time Tracker');
     });
     
-    it('should render three menu items', () => {
-        const { wrapper } = setup();
-        const menuItems = wrapper.find('li.nav-item');
-        expect(menuItems.length).toBe(3);
+    it('should navigate to projects page when I click Projects link', () => {
+        const { getByText } = render(
+            <MemoryRouter>
+                <Header />
+            </MemoryRouter>
+        );
+        const menuLink = getByText('Projects');
+        expect(menuLink.href).toMatch(/\/projects$/);
     });
 });
