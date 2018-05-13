@@ -1,33 +1,58 @@
 ﻿import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Header from './Header';
+import { fetchAllTimeRegistrations, fetchTimeRegistration, deleteTimeRegistration, saveTimeRegistration } from '../services/TimeRegistrationService';
+import { createInvoices, fetchAllInvoices } from '../services/InvoiceService';
+import { fetchAllProjects } from '../services/ProjectService';
 import TimeRegistrations from './TimeRegistrations';
 import TimeRegistrationForm from './TimeRegistrationForm';
 import Projects from './Projects';
 import Invoices from './Invoices';
 
-export default class Routes extends Component {
+class Routes extends Component {
     render() {
-        return <Switch>
-            <DefaultLayout exact path="/" component={TimeRegistrations} />
-            <DefaultLayout exact path="/timeregistrations" component={TimeRegistrations} />
-            <DefaultLayout exact path="/timeregistrations/create" component={TimeRegistrationForm} />
-            <DefaultLayout exact path="/timeregistrations/edit/:id" component={TimeRegistrationForm} />
-            <DefaultLayout exact path="/projects" component={Projects} />
-            <DefaultLayout exact path="/invoices" component={Invoices} />
-        </Switch>;
+        return (
+            <div>
+                <Header />
+                <div className="container">
+                    <Switch>
+                        <Route exact path="/" render={(props) => <TimeRegistrations {...props} 
+                            fetchAllTimeRegistrations={fetchAllTimeRegistrations}
+                            deleteTimeRegistration={deleteTimeRegistration}
+                            createInvoices={createInvoices}
+                            />} 
+                        />
+                        <Route exact path="/timeregistrations" render={(props) => <TimeRegistrations {...props} 
+                            fetchAllTimeRegistrations={fetchAllTimeRegistrations}
+                            deleteTimeRegistration={deleteTimeRegistration} 
+                            createInvoices={createInvoices}
+                            />} 
+                        />
+                        <Route exact path="/timeregistrations/create" render={(props) => <TimeRegistrationForm {...props} 
+                            fetchAllProjects={fetchAllProjects}
+                            fetchTimeRegistration={fetchTimeRegistration}
+                            saveTimeRegistration={saveTimeRegistration}
+                            />} 
+                        />
+                        <Route exact path="/timeregistrations/edit/:id" render={(props) => <TimeRegistrationForm {...props} 
+                            fetchAllProjects={fetchAllProjects}
+                            fetchTimeRegistration={fetchTimeRegistration}
+                            saveTimeRegistration={saveTimeRegistration}
+                            />} 
+                        />
+                        <Route exact path="/projects" render={(props) => <Projects {...props} 
+                            fetchAllProjects={fetchAllProjects}
+                            />} 
+                        />
+                        <Route exact path="/invoices" render={(props) => <Invoices {...props} 
+                            fetchAllInvoices={fetchAllInvoices}
+                            />} 
+                        />
+                    </Switch>
+                </div>
+            </div>
+        );
     }
 }
 
-const DefaultLayout = ({ component: Component, ...rest }) => {
-    return (
-        <Route {...rest} render={props => (
-            <div>
-                <Header {...props} />
-                <div className="container">
-                    <Component {...props} />
-                </div>
-            </div>
-        )} />
-    );
-};
+export default Routes;
