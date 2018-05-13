@@ -6,12 +6,17 @@ Clone the repository and move to the source directory
 git clone https://github.com/teopenna/SimpleProjectTimeTracker.git
 cd SimpleProjectTimeTracker/src/SimpleProjectTimeTracker.Web
 ```
-Install npm dependencies
+Run the server part
 ```
+dotnet run
+```
+Move to ClientApp directory and install npm dependencies
+```
+cd ClientApp
 npm install
 ```
-Run application
+Run client application
 ```
 npm start
 ```
-Open a browser to http://localhost:8080
+Your browser will open http://localhost:3000 page
