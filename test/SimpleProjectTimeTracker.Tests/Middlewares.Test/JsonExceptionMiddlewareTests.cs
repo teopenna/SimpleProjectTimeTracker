@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleProjectTimeTracker.Web;
 using SimpleProjectTimeTracker.Web.Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,7 +15,7 @@ namespace SimpleProjectTimeTracker.Tests.Middlewares.Test
     public class JsonExceptionMiddlewareTests
     {
         [Fact]
-        public async Task AA()
+        public async Task JsonExceptionMiddleware()
         {
             var hostBuilder = new WebHostBuilder()
                 .Configure(app =>
