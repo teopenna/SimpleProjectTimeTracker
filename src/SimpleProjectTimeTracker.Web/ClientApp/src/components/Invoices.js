@@ -1,8 +1,5 @@
 ﻿import React, { Component } from 'react';
-import InvoiceService from '../services/InvoiceService';
 import moment from 'moment';
-
-let invoiceService = new InvoiceService();
 
 class Invoices extends Component {
     constructor(props) {
@@ -13,7 +10,7 @@ class Invoices extends Component {
     }
 
     componentDidMount() {
-        invoiceService.fetchAll()
+        this.props.fetchAllInvoices()
             .then((response) => {
                 const invoices = response.content;
                 this.setState({ invoices: invoices });

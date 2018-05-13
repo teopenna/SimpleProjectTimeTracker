@@ -1,8 +1,5 @@
 ﻿import React, { Component } from 'react';
-import ProjectService from '../services/ProjectService';
 import moment from 'moment';
-
-let projectService = new ProjectService();
 
 class Projects extends Component {
     constructor(props) {
@@ -13,7 +10,7 @@ class Projects extends Component {
     }
 
     componentDidMount() {
-        projectService.fetchAll()
+        this.props.fetchAllProjects()
             .then((response) => {
                 const projects = response.content;
                 this.setState({ projects: projects });
