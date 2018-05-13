@@ -23,7 +23,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\__snapshots__\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\dist\" />
