@@ -78,7 +78,7 @@ namespace SimpleProjectTimeTracker.Tests.Services.Test
                 var result = await Sut.ReadSingleAsync(1, CancellationToken.None);
 
                 Assert.IsAssignableFrom<TimeRegistration>(result);
-                //Assert.Equal("Sample web project for BUILD event", result.ProjectName);
+                Assert.Equal("Sample web project for BUILD event", result.ProjectName);
             }
         }
     }
