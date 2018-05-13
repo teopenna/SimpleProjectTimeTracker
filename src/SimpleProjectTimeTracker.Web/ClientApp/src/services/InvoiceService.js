@@ -1,13 +1,12 @@
 ﻿import RestUtilities from './RestUtilities';
+import { apiConfiguration } from '../configuration';
 
-class InvoiceService {
-    fetchAll() {
-        return RestUtilities.get('http://localhost:8080/api/invoices');
-    }
+function fetchAllInvoices() {
+    return RestUtilities.get(`${apiConfiguration.url}invoices`);
+}
 
-    createInvoices() {
-        return RestUtilities.post('http://localhost:8080/api/invoices');
-    }
-};
+function createInvoices() {
+    return RestUtilities.post(`${apiConfiguration.url}invoices`);
+}
 
-export default InvoiceService;
+export { fetchAllInvoices, createInvoices };

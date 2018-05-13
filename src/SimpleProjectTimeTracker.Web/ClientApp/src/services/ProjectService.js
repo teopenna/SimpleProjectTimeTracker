@@ -1,9 +1,8 @@
 ﻿import RestUtilities from './RestUtilities';
+import { apiConfiguration } from '../configuration';
 
-class ProjectService {
-    fetchAll() {
-        return RestUtilities.get('http://localhost:8080/api/projects');
-    }
-};
+function fetchAllProjects() {
+    return RestUtilities.get(`${apiConfiguration.url}projects`);
+}
 
-export default ProjectService;
+export { fetchAllProjects };

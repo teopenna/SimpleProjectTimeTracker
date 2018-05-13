@@ -1,49 +1,45 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import TimeRegistrationService from '../services/TimeRegistrationService';
-import InvoiceService from '../services/InvoiceService';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import checkmark from '../checkmark.svg';
 
-export default class TimeRegistrations extends Component {
+class TimeRegistrations extends Component {
     constructor(props) {
         super(props);
-
-        this.timeRegistrationService = new TimeRegistrationService();
-        this.invoiceService = new InvoiceService();
-
+        
         this.state = {
             timeRegistrations: []
         };
     }
 
     componentDidMount() {
-        this.timeRegistrationService.fetchAll()
-            .then((response) => {
-                const timeRegistrations = response.content;
-                this.setState({ timeRegistrations: timeRegistrations });
-            });
+        this.fetch();
     }
 
-    delete(timeRegistration) {
+    fetch = async() => {
+        const response = await this.props.fetchAllTimeRegistrations();
+        const timeRegistrations = response.content;
+        this.setState({ timeRegistrations: timeRegistrations });
+    }
+
+    delete = async(timeRegistration) => {
         if (window.confirm(`Delete Time Registration with id ${timeRegistration.id}. Are you sure?`)) {
-            this.timeRegistrationService.delete(timeRegistration.id).then((response) => {
-                let updatedTimeRegistrations = this.state.timeRegistrations;
-                updatedTimeRegistrations.splice(updatedTimeRegistrations.indexOf(timeRegistration), 1);
-                this.setState({ timeRegistration: updatedTimeRegistrations });
-            });
+            await this.props.deleteTimeRegistration(timeRegistration.id);
+            let updatedTimeRegistrations = this.state.timeRegistrations;
+            updatedTimeRegistrations.splice(updatedTimeRegistrations.indexOf(timeRegistration), 1);
+            this.setState({ timeRegistration: updatedTimeRegistrations });
         }
     }
 
-    createInvoices() {
+    createInvoices = async() => {
         if (window.confirm('Do you really want to create invoices for not accounted time registrations?')) {
-            this.invoiceService.createInvoices().then(response => {
-                if (!response.is_error) {
-                    this.props.history.push('/invoices');
-                } else {
-                    this.setState({ errors: response.error_content });
-                }
-            });
+            const response = await this.props.createInvoices();
+            if (!response.is_error) {
+                this.props.history.push('/invoices');
+            } else {
+                this.setState({ errors: response.error_content });
+            }
         }
     }
 
@@ -55,7 +51,7 @@ export default class TimeRegistrations extends Component {
                 </div>
                 <div className="panel-body">
                     <Link className="btn btn-primary" to="/timeregistrations/create">Add Time Registration</Link>
-                    <table className="table table-stripe">
+                    <table className="table table-stripe" data-testid="timeregistrationtable">
                         <thead>
                             <tr>
                                 <th>Project</th>
@@ -63,7 +59,7 @@ export default class TimeRegistrations extends Component {
                                 <th>Date</th>
                                 <th>Hours Worked</th>
                                 <th>Accounted</th>
-                                <th></th>
+                                <th>Edit/Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,3 +86,11 @@ export default class TimeRegistrations extends Component {
         );
     }
 }
+
+TimeRegistrations.propTypes = {
+    fetchAllTimeRegistrations: PropTypes.func.isRequired,
+    deleteTimeRegistration: PropTypes.func.isRequired,
+    createInvoices: PropTypes.func.isRequired
+};
+
+export default TimeRegistrations;

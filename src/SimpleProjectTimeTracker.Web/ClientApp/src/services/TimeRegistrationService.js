@@ -1,33 +1,32 @@
 ﻿import RestUtilities from './RestUtilities';
+import { apiConfiguration } from '../configuration';
 
-class TimeRegistrationService {
-    fetchAll() {
-        return RestUtilities.get('http://localhost:8080/api/timeregistrations');
+function fetchAllTimeRegistrations() {
+    return RestUtilities.get(`${apiConfiguration.url}timeregistrations`);
+}
+
+function fetchTimeRegistration(timeRegistrationId) {
+    return RestUtilities.get(`${apiConfiguration.url}timeregistrations/${timeRegistrationId}`);
+}
+
+function updateTimeRegistration(timeRegistration) {
+    return RestUtilities.put(`${apiConfiguration.url}timeregistrations/${timeRegistration.id}`, timeRegistration);
+}
+
+function createTimeRegistration(timeRegistration) {
+    return RestUtilities.post(`${apiConfiguration.url}timeregistrations`, timeRegistration);
+}
+
+function saveTimeRegistration(timeRegistration) {
+    if (timeRegistration.id) {
+        return updateTimeRegistration(timeRegistration);
+    } else {
+        return createTimeRegistration(timeRegistration);
     }
+}
 
-    fetch(timeRegistrationId) {
-        return RestUtilities.get(`http://localhost:8080/api/timeregistrations/${timeRegistrationId}`);
-    }
+function deleteTimeRegistration(timeRegistrationId) {
+    return RestUtilities.delete(`${apiConfiguration.url}timeregistrations/${timeRegistrationId}`);
+}
 
-    update(timeRegistration) {
-        return RestUtilities.put(`http://localhost:8080/api/timeregistrations/${timeRegistration.id}`, timeRegistration);
-    }
-
-    create(timeRegistration) {
-        return RestUtilities.post('http://localhost:8080/api/timeregistrations', timeRegistration);
-    }
-
-    save(timeRegistration) {
-        if (timeRegistration.id) {
-            return this.update(timeRegistration);
-        } else {
-            return this.create(timeRegistration);
-        }
-    }
-
-    delete(timeRegistrationId) {
-        return RestUtilities.delete(`http://localhost:8080/api/timeregistrations/${timeRegistrationId}`);
-    }
-};
-
-export default TimeRegistrationService;
+export { fetchAllTimeRegistrations, fetchTimeRegistration, saveTimeRegistration, deleteTimeRegistration };
