@@ -5,11 +5,13 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "react": "^16.3.2",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "rimraf": "^2.6.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
