@@ -1,11 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import TimeRegistrationService from '../services/TimeRegistrationService';
-import ProjectService from '../services/ProjectService';
 import moment from 'moment';
-
-let timeRegistrationService = new TimeRegistrationService();
-let projectService = new ProjectService();
 
 class TimeRegistrationForm extends Component {
     constructor(props) {
@@ -21,13 +16,13 @@ class TimeRegistrationForm extends Component {
     }
 
     componentDidMount() {
-        projectService.fetchAll()
+        this.props.fetchAllProjects()
             .then(response => {
                 const projects = response.content;
                 this.setState({ projects: projects });
 
                 if (this.props.match.path === '/timeregistrations/edit/:id') {
-                    timeRegistrationService.fetch(this.props.match.params.id)
+                    this.props.fetchTimeRegistration(this.props.match.params.id)
                         .then(response => {
                             let editTimeRegistration = response.content;
                             editTimeRegistration.date = moment(editTimeRegistration.date).format('YYYY-MM-DD');
@@ -74,7 +69,7 @@ class TimeRegistrationForm extends Component {
 
     saveTimeRegistration(timeRegistration) {
         this.setState({ errors: {} });
-        timeRegistrationService.save(timeRegistration).then((response) => {
+        this.props.saveTimeRegistration(timeRegistration).then((response) => {
             if (!response.is_error) {
                 this.props.history.push('/timeregistrations');
             } else {
@@ -89,8 +84,8 @@ class TimeRegistrationForm extends Component {
                 <legend>{this.state.timeRegistration.id ? "Edit Time Registration" : "New Time Registration"}</legend>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
                     <div>
-                        <label htmlFor="selProject" className="form-control-label">Project:</label>
-                        <select id="selProject" name="projectId" onChange={(e) => this.handleInputChange(e)} className="form-control form-control-danger" value={this.state.timeRegistration.projectId}>
+                        <label htmlFor="selProjects" className="form-control-label">Project:</label>
+                        <select data-testid="selProjects" id="selProjects" name="projectId" onChange={(e) => this.handleInputChange(e)} className="form-control form-control-danger" value={this.state.timeRegistration.projectId}>
                             {this.state.projects.map(project =>
                                 <option key={project.id} value={project.id}>{project.name} ({project.customerName})</option>
                             )}
